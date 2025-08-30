@@ -5,6 +5,9 @@ metadata:
   namespace: default
   labels:
     k8s-app: meals-opengraph
+    app.kubernetes.io/name: meals-opengraph
+    app.kubernetes.io/component: seo-service
+    app.kubernetes.io/part-of: meals-platform
 spec:
   type: ClusterIP
   selector:

@@ -3,6 +3,10 @@ kind: Service
 metadata:
   name: meals-web-client
   namespace: default
+  labels:
+    app.kubernetes.io/name: meals-web-client
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: meals-platform
 spec:
   type: ClusterIP
   selector:

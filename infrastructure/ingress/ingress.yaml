@@ -3,6 +3,10 @@ kind: Ingress
 metadata:
   name: meals-web-client
   namespace: default
+  labels:
+    app.kubernetes.io/name: meals-ingress
+    app.kubernetes.io/component: ingress
+    app.kubernetes.io/part-of: meals-platform
   annotations:
     acme.cert-manager.io/http01-edit-in-place: "true"
     cert-manager.io/issue-temporary-certificate: "true"

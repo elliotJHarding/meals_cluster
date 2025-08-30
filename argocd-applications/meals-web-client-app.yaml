@@ -11,6 +11,8 @@ spec:
     repoURL: https://github.com/your-username/meals_cluster.git
     targetRevision: HEAD
     path: apps/meals-web-client
+    directory:
+      recurse: false
   destination:
     server: https://kubernetes.default.svc
     namespace: default

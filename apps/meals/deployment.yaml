@@ -5,6 +5,9 @@ metadata:
   namespace: default
   labels:
     k8s-app: meals
+    app.kubernetes.io/name: meals
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: meals-platform
 spec:
   replicas: 1
   selector:

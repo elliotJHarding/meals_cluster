@@ -5,6 +5,9 @@ metadata:
   namespace: default
   labels:
     k8s-app: meals-web-client
+    app.kubernetes.io/name: meals-web-client
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: meals-platform
 spec:
   replicas: 1
   selector:

@@ -20,11 +20,12 @@ The platform consists of:
 │   ├── meals-opengraph-app.yaml # OpenGraph service application
 │   └── meals-infrastructure-app.yaml # Infrastructure application
 ├── apps/                        # Application-specific manifests
-│   ├── meals/                   # Backend service
-│   ├── meals-web-client/        # Frontend 
-│   └── meals-opengraph/         # OpenGraph service
+│   ├── meals/                   # Backend service (deployment.yaml, service.yaml, secrets.yaml)
+│   ├── meals-web-client/        # Frontend (deployment.yaml, service.yaml)
+│   └── meals-opengraph/         # OpenGraph service (deployment.yaml, service.yaml)
 ├── infrastructure/              # Infrastructure components
-│   └── ingress/                # Ingress configuration
+│   └── ingress/                # Ingress configuration (ingress.yaml)
+├── secrets/                    # Secrets management (template + docs)
 └── k8s-cluster-config/         # Original exported cluster state (reference)
 ```
 
@@ -94,7 +95,7 @@ The meals backend configuration is split between environment variables and Kuber
 
 #### Adding New Applications
 1. Create new directory under `apps/`
-2. Add Kubernetes manifests and kustomization.yaml
+2. Add Kubernetes manifests (deployment.yaml, service.yaml, etc.)
 3. Create corresponding ArgoCD Application in `argocd-applications/`
 4. Commit changes - root app will deploy the new application
 
