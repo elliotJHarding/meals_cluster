@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: meals-opengraph
+  namespace: default
+  labels:
+    k8s-app: meals-opengraph
+spec:
+  type: ClusterIP
+  selector:
+    k8s-app: meals-opengraph
+  ports:
+  - name: tcp-80-3000-9m6wn
+    port: 80
+    protocol: TCP
+    targetPort: 3000

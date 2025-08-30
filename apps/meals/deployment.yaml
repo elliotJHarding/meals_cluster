@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meals
+  namespace: default
+  labels:
+    k8s-app: meals
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: meals
+  template:
+    metadata:
+      labels:
+        k8s-app: meals
+      name: meals
+    spec:
+      containers:
+      - name: meals
+        image: grubplanner.co.uk:32000/meals:latest
+        imagePullPolicy: Always
+        env:
+        # Database configuration
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: meals-database-secret
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: meals-database-secret
+              key: password
+        - name: DB_URL
+          value: aws-0-eu-west-2.pooler.supabase.com:5432/meals
+        
+        # Redis configuration
+        - name: REDIS_URL
+          value: redis-14596.c338.eu-west-2-1.ec2.redns.redis-cloud.com
+        - name: REDIS_PORT
+          value: "14596"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: meals-redis-secret
+              key: password
+        - name: REDIS_USERNAME
+          value: default
+        - name: REDIS_DB_INDEX
+          value: "0"
+        
+        # Google OAuth configuration
+        - name: GOOGLE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: meals-google-oauth-secret
+              key: client-id
+        - name: GOOGLE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: meals-google-oauth-secret
+              key: client-secret
+        
+        # Application configuration
+        - name: TOKEN_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: meals-app-secret
+              key: token-secret
+        - name: REDIRECT_URL
+          value: https://grubplanner.co.uk/calendar/link
+        - name: CLIENT_URL
+          value: https://grubplanner.co.uk
+        - name: SECURE_COOKIE
+          value: "false"
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: api/actuator/health/liveness
+            port: 8080
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: api/actuator/health/readiness
+            port: 8080
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: api/actuator/health/liveness
+            port: 8080
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 30
+        securityContext:
+          privileged: true
+          runAsUser: 0
+          runAsGroup: 0

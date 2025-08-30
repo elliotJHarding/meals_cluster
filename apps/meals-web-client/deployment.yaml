@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meals-web-client
+  namespace: default
+  labels:
+    k8s-app: meals-web-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: meals-web-client
+  template:
+    metadata:
+      labels:
+        k8s-app: meals-web-client
+      name: meals-web-client
+    spec:
+      containers:
+      - name: meals-web-client
+        image: grubplanner.co.uk:32000/meals_web_client
+        imagePullPolicy: Always
+        env:
+        - name: VITE_REPOSITORY_URL
+          value: http://meals
+        ports:
+        - containerPort: 3000
+        securityContext:
+          privileged: false

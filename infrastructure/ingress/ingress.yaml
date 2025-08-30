@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: meals-web-client
+  namespace: default
+  annotations:
+    acme.cert-manager.io/http01-edit-in-place: "true"
+    cert-manager.io/issue-temporary-certificate: "true"
+    cert-manager.io/issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - grubplanner.co.uk
+    secretName: tls-cert
+  rules:
+  - host: grubplanner.co.uk
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: meals-web-client
+            port:
+              number: 80
+      - path: /api/
+        pathType: Prefix
+        backend:
+          service:
+            name: meals
+            port:
+              number: 80
+      - path: /opengraph/
+        pathType: Prefix
+        backend:
+          service:
+            name: meals-opengraph
+            port:
+              number: 80

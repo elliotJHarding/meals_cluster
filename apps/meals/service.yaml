@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: meals
+  namespace: default
+  labels:
+    k8s-app: meals
+spec:
+  type: ClusterIP
+  selector:
+    k8s-app: meals
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080

@@ -1,0 +1,34 @@
+# Secrets - Never commit actual secret values
+secrets/meals-secrets.yaml
+secrets/*-secrets.yaml
+secrets/*.yaml
+!secrets/meals-secrets.template.yaml
+!secrets/README.md
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+*~
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local environment files
+.env
+.env.local
+.env.*.local
+
+# ArgoCD local state
+.argocd/
+
+# Backup files
+*.bak
+*.backup
+
+# OS generated files
+Thumbs.db
+ehthumbs.db

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meals-opengraph
+  namespace: default
+  labels:
+    k8s-app: meals-opengraph
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: meals-opengraph
+  template:
+    metadata:
+      labels:
+        k8s-app: meals-opengraph
+      name: meals-opengraph
+    spec:
+      containers:
+      - name: meals-opengraph
+        image: grubplanner.co.uk:32000/meals_opengraph:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        securityContext:
+          privileged: false
