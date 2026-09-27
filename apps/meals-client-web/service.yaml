@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: meals-client-web
+  namespace: default
+  labels:
+    app.kubernetes.io/name: meals-client-web
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: meals-platform
+spec:
+  type: ClusterIP
+  selector:
+    k8s-app: meals-client-web
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 3000

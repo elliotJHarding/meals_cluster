@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meals-client-web
+  namespace: default
+  labels:
+    k8s-app: meals-client-web
+    app.kubernetes.io/name: meals-client-web
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: meals-platform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: meals-client-web
+  template:
+    metadata:
+      labels:
+        k8s-app: meals-client-web
+      name: meals-client-web
+    spec:
+      containers:
+      - name: meals-client-web
+        image: grubplanner.co.uk:32000/meals_client_web
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        securityContext:
+          privileged: false

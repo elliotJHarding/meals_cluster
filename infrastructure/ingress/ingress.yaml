@@ -16,6 +16,8 @@ spec:
   tls:
   - hosts:
     - grubplanner.co.uk
+    # ROUTING DECISION (coexist, lowest-risk default — see rules below).
+    - app.grubplanner.co.uk
     secretName: tls-cert
   rules:
   - host: grubplanner.co.uk
@@ -40,5 +42,42 @@ spec:
         backend:
           service:
             name: meals-opengraph
+            port:
+              number: 80
+  # ─────────────────────────────────────────────────────────────────────────
+  # ROUTING DECISION FLAGGED FOR THE USER — whether the Meals 2.0 client
+  # REPLACES v1 or COEXISTS with it is a PRODUCT call, not a deploy detail.
+  # Implemented here: COEXIST (lowest risk). v1 at grubplanner.co.uk/ is left
+  # completely untouched; the 2.0 client is served on a NEW host. Both call the
+  # same /api backend — v2 is built with VITE_REPOSITORY_URL=/api, so it must
+  # reach the server at its own origin: the /api/ route below is duplicated
+  # under the new host for that reason.
+  #
+  # PREREQUISITE (else this host 404s / cert-fails): a DNS A/CNAME record for
+  # app.grubplanner.co.uk pointing at the ingress, and the host added to the
+  # TLS SAN above (done) so cert-manager re-issues tls-cert to cover it.
+  #
+  # ALTERNATIVES the user may prefer instead:
+  #  - REPLACE v1: change the grubplanner.co.uk `/` backend above from
+  #    meals-web-client to meals-client-web. Highest blast radius; instant
+  #    cutover for all users; no new DNS/cert. Delete this whole host block.
+  #  - PATH prefix on the existing host (e.g. /app): no new DNS/cert, but the
+  #    Vite app must be rebuilt with `base: '/app/'` or its assets 404 — it has
+  #    no base set today, so this is NOT drop-in and was not chosen.
+  - host: app.grubplanner.co.uk
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: meals-client-web
+            port:
+              number: 80
+      - path: /api/
+        pathType: Prefix
+        backend:
+          service:
+            name: meals
             port:
               number: 80
